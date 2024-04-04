@@ -19,15 +19,16 @@ import {
   Typography,
 } from "@mui/material";
 import { Menu } from "@mui/icons-material";
+import { selectorIsInitialized, selectorIsLoggedIn, selectorStatus } from "app/app-selectors";
 
 type PropsType = {
   demo?: boolean;
 };
 
 function App({ demo = false }: PropsType) {
-  const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status);
-  const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized);
-  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
+  const status = useSelector(selectorStatus);
+  const isInitialized = useSelector(selectorIsInitialized);
+  const isLoggedIn = useSelector(selectorIsLoggedIn);
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
