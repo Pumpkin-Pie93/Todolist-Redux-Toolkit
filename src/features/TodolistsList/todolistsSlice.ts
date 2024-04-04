@@ -4,6 +4,7 @@ import { appActions, RequestStatusType } from "app/appSlice";
 import { handleServerNetworkError } from "utils/error-utils";
 import { AppDispatch, AppThunk } from "app/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { clearTasksAndTodolists } from "common/actions/common-actions";
 
 const slice = createSlice({
   name: "todolists",
@@ -47,9 +48,15 @@ const slice = createSlice({
         state[index].entityStatus = action.payload.entityStatus;
       }
     },
-    cleanTodolists: (state) => {
-      return (state = []);
+    cleanTodolists: () => {
+      return [];
     },
+  },
+  extraReducers: (builder) => {
+    // прииспользовании clearTasksAndTodolists из common actions:
+    // builder.addCase(clearTasksAndTodolists,(state, action) => {
+    //   return action.payload.todolists
+    // })
   },
 });
 
