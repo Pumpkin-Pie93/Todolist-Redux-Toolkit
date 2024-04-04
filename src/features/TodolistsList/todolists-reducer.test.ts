@@ -1,12 +1,11 @@
 import {
   FilterValuesType,
-  setTodolistsAC,
   todolistActions,
   TodolistDomainType,
   todolistsReducer,
 } from "features/TodolistsList/todolistsSlice";
 import { v1 } from "uuid";
-import { TodolistType } from "../../api/todolists-api";
+import { TodolistType } from "api/todolists-api";
 import { RequestStatusType } from "app/appSlice";
 
 let todolistId1: string;

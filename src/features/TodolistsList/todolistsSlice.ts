@@ -47,6 +47,9 @@ const slice = createSlice({
         state[index].entityStatus = action.payload.entityStatus;
       }
     },
+    cleanTodolists: (state) => {
+      return (state = []);
+    },
   },
 });
 
