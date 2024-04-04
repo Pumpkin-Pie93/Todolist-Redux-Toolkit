@@ -29,6 +29,25 @@ const slice = createSlice({
         currentTasksForTodolist.splice(index, 1);
       }
     },
+    _removeTask: {
+      // исп-е prepare reducer
+      reducer: (state, action: PayloadAction<{ taskId: string; todolistId: string }>) => {
+        const currentTasksForTodolist = state[action.payload.todolistId];
+        const index = currentTasksForTodolist.findIndex((el) => el.id === action.payload.taskId);
+        if (index !== -1) {
+          currentTasksForTodolist.splice(index, 1);
+        }
+      },
+      prepare: (taskId: string, todolistId: string) => {
+        // всегда выполнится первым(преоразует payload)
+        return {
+          payload: {
+            taskId,
+            todolistId,
+          },
+        };
+      },
+    },
     addTask: (state, action: PayloadAction<{ task: TaskType }>) => {
       const currentTasksForTodolist = state[action.payload.task.todoListId];
       currentTasksForTodolist.unshift(action.payload.task);
