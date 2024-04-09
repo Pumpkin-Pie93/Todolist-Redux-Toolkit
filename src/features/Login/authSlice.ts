@@ -1,25 +1,11 @@
-import { Dispatch } from "redux";
-// import { SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType } from "app/app-reducer";
 import { authAPI, LoginParamsType } from "api/todolists-api";
-import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
+import { handleServerNetworkError } from "utils/error-utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "app/store";
-import { appActions, appReducer, appThunks } from "app/appSlice";
+import { appActions } from "app/appSlice";
 import { todolistActions } from "features/TodolistsList/todolistsSlice";
 
-// const initialState: InitialStateType = {
-//   isLoggedIn: false,
-// };
 export type AppInitialStateType = ReturnType<typeof slice.getInitialState>;
-
-// export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-//   switch (action.type) {
-//     case "login/SET-IS-LOGGED-IN":
-//       return { ...state, isLoggedIn: action.value };
-//     default:
-//       return state;
-//   }
-// };
 
 const slice = createSlice({
   name: "auth",
@@ -28,7 +14,6 @@ const slice = createSlice({
   },
   reducers: {
     setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
-      // return { ...state, isLoggedIn: action.payload.value };
       state.isLoggedIn = action.payload.isLoggedIn;
     },
   },
@@ -38,8 +23,6 @@ const slice = createSlice({
 export const authReducer = slice.reducer;
 export const authActions = slice.actions;
 export const authThunks = {};
-
-// actions
 
 // thunks
 export const loginTC =
@@ -53,7 +36,7 @@ export const loginTC =
           dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
           dispatch(appActions.setAppStatus({ status: "succeeded" }));
         } else {
-          handleServerAppError(res.data, dispatch);
+          handleServerNetworkError(res.data, dispatch);
         }
       })
       .catch((error) => {
@@ -71,7 +54,7 @@ export const logoutTC = (): AppThunk => (dispatch) => {
         dispatch(todolistActions.cleanTodolists());
         dispatch(appActions.setAppStatus({ status: "succeeded" }));
       } else {
-        handleServerAppError(res.data, dispatch);
+        handleServerNetworkError(res.data, dispatch);
       }
     })
     .catch((error) => {

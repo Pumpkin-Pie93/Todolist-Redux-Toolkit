@@ -2,6 +2,7 @@ import { tasksActions, tasksReducer, TasksStateType, tasksThunks } from "feature
 
 import { setTodolistsAC, todolistActions } from "features/TodolistsList/todolistsSlice";
 import { TaskPriorities, TaskStatuses } from "../../api/todolists-api";
+import { ActionTypeForTest } from "common/actions/types/types";
 
 let startState: TasksStateType = {};
 beforeEach(() => {
@@ -94,22 +95,25 @@ test("correct task should be deleted from correct array", () => {
   expect(endState["todolistId2"].length).toBe(2);
   expect(endState["todolistId2"].every((t) => t.id != "2")).toBeTruthy();
 });
+
 test("correct task should be added to correct array", () => {
-  //const action = addTaskAC("juce", "todolistId2");
-  const action = tasksActions.addTask({
-    task: {
-      todoListId: "todolistId2",
-      title: "juce",
-      status: TaskStatuses.New,
-      addedDate: "",
-      deadline: "",
-      description: "",
-      order: 0,
-      priority: 0,
-      startDate: "",
-      id: "id exists",
+  const action: ActionTypeForTest<typeof tasksThunks.addTask.fulfilled> = {
+    type: tasksThunks.addTask.fulfilled.type,
+    payload: {
+      task: {
+        todoListId: "todolistId2",
+        title: "juce",
+        status: TaskStatuses.New,
+        addedDate: "",
+        deadline: "",
+        description: "",
+        order: 0,
+        priority: 0,
+        startDate: "",
+        id: "id exists",
+      },
     },
-  });
+  };
 
   const endState = tasksReducer(startState, action);
 
@@ -120,13 +124,23 @@ test("correct task should be added to correct array", () => {
   expect(endState["todolistId2"][0].status).toBe(TaskStatuses.New);
 });
 test("status of specified task should be changed", () => {
-  const action = tasksActions.updateTask({
-    taskId: "2",
-    model: {
-      status: TaskStatuses.New,
+  const action: ActionTypeForTest<typeof tasksThunks.updateTask.fulfilled> = {
+    type: tasksThunks.updateTask.fulfilled.type,
+    payload: {
+      taskId: "2",
+      todolistId: "todolistId2",
+      domainModel: {
+        status: TaskStatuses.New,
+      },
     },
-    todolistId: "todolistId2",
-  });
+  };
+  // const _action = tasksActions.updateTask({
+  //   taskId: "2",
+  //   model: {
+  //     status: TaskStatuses.New,
+  //   },
+  //   todolistId: "todolistId2",
+  // });
 
   const endState = tasksReducer(startState, action);
 
@@ -134,8 +148,17 @@ test("status of specified task should be changed", () => {
   expect(endState["todolistId2"][1].status).toBe(TaskStatuses.New);
 });
 test("title of specified task should be changed", () => {
-  const action = tasksActions.updateTask({ taskId: "2", model: { title: "yogurt" }, todolistId: "todolistId2" });
-
+  // const action = tasksActions.updateTask({ taskId: "2", model: { title: "yogurt" }, todolistId: "todolistId2" });
+  const action: ActionTypeForTest<typeof tasksThunks.updateTask.fulfilled> = {
+    type: tasksThunks.updateTask.fulfilled.type,
+    payload: {
+      taskId: "2",
+      todolistId: "todolistId2",
+      domainModel: {
+        title: "yogurt",
+      },
+    },
+  };
   const endState = tasksReducer(startState, action);
 
   expect(endState["todolistId1"][1].title).toBe("JS");
@@ -228,16 +251,3 @@ test("tasks should be added for todolist", () => {
 // };
 //
 // // Но можно это дело немного упростить. Сделать типизацию с помощью TS
-//
-// // Пояснить на занятии насчет Omit
-// type FetchTasksActionType = Omit<ReturnType<typeof tasksThunks.fetchTasks.fulfilled>, "meta">;
-//
-//
-// // Усложняем. Говорим про дженерики
-//
-// type ActionTypeForTest<T extends (...args: any) => any> = Omit<ReturnType<T>, "meta">
-//
-// const action: ActionTypeForTest<typeof tasksThunks.fetchTasks.fulfilled> = {
-//   type: tasksThunks.fetchTasks.fulfilled.type,
-//   payload: { tasks: startState["todolistId1"], todolistId: "todolistId1" },
-// };

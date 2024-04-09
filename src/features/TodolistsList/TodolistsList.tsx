@@ -10,7 +10,7 @@ import {
   todolistActions,
   TodolistDomainType,
 } from "features/TodolistsList/todolistsSlice";
-import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from "features/TodolistsList/tasksSlice";
+import { removeTaskTC, TasksStateType, tasksThunks, updateTaskTC } from "features/TodolistsList/tasksSlice";
 import { TaskStatuses } from "api/todolists-api";
 import { Grid, Paper } from "@mui/material";
 import { AddItemForm } from "components/AddItemForm/AddItemForm";
@@ -44,7 +44,7 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
-    const thunk = addTaskTC(title, todolistId);
+    const thunk = tasksThunks.addTask({ title, todolistId });
     dispatch(thunk);
   }, []);
 
