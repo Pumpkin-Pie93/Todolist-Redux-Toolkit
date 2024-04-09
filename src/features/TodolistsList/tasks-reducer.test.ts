@@ -1,4 +1,4 @@
-import { tasksActions, tasksReducer, TasksStateType } from "features/TodolistsList/tasksSlice";
+import { tasksActions, tasksReducer, TasksStateType, tasksThunks } from "features/TodolistsList/tasksSlice";
 
 import { setTodolistsAC, todolistActions } from "features/TodolistsList/todolistsSlice";
 import { TaskPriorities, TaskStatuses } from "../../api/todolists-api";
@@ -196,7 +196,12 @@ test("empty arrays should be added when we set todolists", () => {
   expect(endState["2"]).toBeDefined();
 });
 test("tasks should be added for todolist", () => {
-  const action = tasksActions.setTasks({ tasks: startState["todolistId1"], todolistId: "todolistId1" });
+  // const action = tasksActions.setTasks({ tasks: startState["todolistId1"], todolistId: "todolistId1" });
+  const action = tasksThunks.fetchTasks.fulfilled(
+    { tasks: startState["todolistId1"], todolistId: "todolistId1" },
+    "requestId",
+    "todolistId1",
+  );
 
   const endState = tasksReducer(
     {
@@ -209,3 +214,30 @@ test("tasks should be added for todolist", () => {
   expect(endState["todolistId1"].length).toBe(3);
   expect(endState["todolistId2"].length).toBe(0);
 });
+
+// другие способы наисния теста
+
+// type FetchTasksActionType = {
+//   type: string;
+//   payload: { tasks: TaskType[]; todolistId: string };
+// };
+//
+// const action: FetchTasksActionType = {
+//   type: tasksThunks.fetchTasks.fulfilled.type,
+//   payload: { tasks: startState["todolistId1"], todolistId: "todolistId1" },
+// };
+//
+// // Но можно это дело немного упростить. Сделать типизацию с помощью TS
+//
+// // Пояснить на занятии насчет Omit
+// type FetchTasksActionType = Omit<ReturnType<typeof tasksThunks.fetchTasks.fulfilled>, "meta">;
+//
+//
+// // Усложняем. Говорим про дженерики
+//
+// type ActionTypeForTest<T extends (...args: any) => any> = Omit<ReturnType<T>, "meta">
+//
+// const action: ActionTypeForTest<typeof tasksThunks.fetchTasks.fulfilled> = {
+//   type: tasksThunks.fetchTasks.fulfilled.type,
+//   payload: { tasks: startState["todolistId1"], todolistId: "todolistId1" },
+// };
