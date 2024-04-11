@@ -5,6 +5,7 @@ import { appActions } from "app/appSlice"
 import { todolistActions } from "features/TodolistsList/todolistsSlice"
 import { handleServerNetworkError } from "common/utils"
 import { authAPI } from "features/Login/authApi"
+import { clearTasksAndTodolists } from "common/actions/common-actions"
 
 export type AppInitialStateType = ReturnType<typeof slice.getInitialState>
 
@@ -52,7 +53,7 @@ export const logoutTC = (): AppThunk => (dispatch) => {
     .then((res) => {
       if (res.data.resultCode === 0) {
         dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }))
-        dispatch(todolistActions.cleanTodolists())
+        dispatch(clearTasksAndTodolists())
         dispatch(appActions.setAppStatus({ status: "succeeded" }))
       } else {
         handleServerNetworkError(res.data, dispatch)

@@ -2,29 +2,16 @@ import { TaskType, todolistsAPI, UpdateTaskModelType } from "features/TodolistsL
 import { AppThunk } from "app/store"
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "common/utils"
 import { appActions } from "app/appSlice"
-import { todolistActions } from "features/TodolistsList/todolistsSlice"
+import { todolistActions, todolistThunks } from "features/TodolistsList/todolistsSlice"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { ResultCode, TaskPriorities, TaskStatuses } from "common/enums/enums"
+import { clearTasksAndTodolists } from "common/actions/common-actions"
 
 const slice = createSlice({
   name: "tasks",
   initialState: {} as TasksStateType,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(todolistActions.addTodolist, (state, action) => {
-      state[action.payload.todolist.id] = []
-    })
-    builder.addCase(todolistActions.removeTodolist, (state, action) => {
-      delete state[action.payload.id]
-    })
-    builder.addCase(todolistActions.setTodolists, (state, action) => {
-      action.payload.todolists.forEach((t) => {
-        state[t.id] = []
-      })
-    })
-    builder.addCase(todolistActions.cleanTodolists, () => {
-      return {}
-    })
     builder.addCase(fetchTasks.fulfilled, (state, action) => {
       state[action.payload.todolistId] = action.payload.tasks
     })
@@ -46,9 +33,22 @@ const slice = createSlice({
         currentTasksForTodolist.splice(index, 1)
       }
     })
+    builder.addCase(todolistThunks.fetchTodolists.fulfilled, (state, action) => {
+      action.payload.todolists.forEach((tl) => {
+        state[tl.id] = []
+      })
+    })
+    builder.addCase(todolistThunks.removeTodolist.fulfilled, (state, action) => {
+      delete state[action.payload.id]
+    })
+    builder.addCase(todolistThunks.addTodolist.fulfilled, (state, action) => {
+      state[action.payload.todolist.id] = []
+    })
+    builder.addCase(clearTasksAndTodolists, (state, action) => {
+      return {}
+    })
   },
 })
-
 // thunks
 
 export const fetchTasks = createAppAsyncThunk<{ tasks: TaskType[]; todolistId: string }, string>(
