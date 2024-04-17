@@ -39,12 +39,13 @@ const slice = createSlice({
       })
     })
     builder.addCase(todolistThunks.removeTodolist.fulfilled, (state, action) => {
+      console.log("id todo from tasks" + action.payload.id)
       delete state[action.payload.id]
     })
     builder.addCase(todolistThunks.addTodolist.fulfilled, (state, action) => {
       state[action.payload.todolist.id] = []
     })
-    builder.addCase(clearTasksAndTodolists, (state, action) => {
+    builder.addCase(clearTasksAndTodolists, () => {
       return {}
     })
   },
