@@ -1,19 +1,12 @@
 import React, { useCallback, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { AppRootStateType } from "app/store"
-import {
-  FilterValuesType,
-  todolistActions,
-  TodolistDomainType,
-  todolistThunks,
-} from "features/TodolistsList/todolistsSlice"
-import { TasksStateType, tasksThunks } from "features/TodolistsList/tasksSlice"
+import { FilterValuesType, todolistActions, todolistThunks } from "features/TodolistsList/todolistsSlice"
+import { tasksThunks } from "features/TodolistsList/tasksSlice"
 import { Grid, Paper } from "@mui/material"
 import { AddItemForm } from "common/components/AddItemForm/AddItemForm"
 import { Todolist } from "./Todolist/Todolist"
 import { Navigate } from "react-router-dom"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
-import { selectorIsLoggedIn } from "app/app-selectors"
 import { TaskStatuses } from "common/enums"
 import { selectTodolists } from "features/TodolistsList/todolists.selectors"
 import { selectTasks } from "features/TodolistsList/tasks.selectors"
@@ -24,12 +17,10 @@ type PropsType = {
 }
 
 export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
-  // const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>((state) => state.todolists)
-  //   const tasks = useSelector<AppRootStateType, TasksStateType>((state) => state.tasks)
-  // const isLoggedIn = useSelector(selectorIsLoggedIn)
   const todolists = useSelector(selectTodolists)
   const tasks = useSelector(selectTasks)
   const isLoggedIn = useSelector(selectIsLoggedIn)
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -63,8 +54,8 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     dispatch(action)
   }, [])
 
-  const removeTodolist = useCallback(function (todolistId: string) {
-    dispatch(todolistThunks.removeTodolist(todolistId))
+  const removeTodolist = useCallback(function (id: string) {
+    dispatch(todolistThunks.removeTodolist({ id }))
   }, [])
 
   const changeTodolistTitle = useCallback(function (id: string, title: string) {
