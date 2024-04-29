@@ -18,6 +18,7 @@ import {
 import { Menu } from "@mui/icons-material"
 import { selectorIsInitialized, selectorIsLoggedIn, selectorStatus } from "app/app-selectors"
 import { authThunks } from "features/Login/authSlice"
+import { useActions } from "common/hooks/useActions"
 
 type PropsType = {
   demo?: boolean
@@ -27,14 +28,17 @@ function App({ demo = false }: PropsType) {
   const status = useSelector(selectorStatus)
   const isInitialized = useSelector(selectorIsInitialized)
   const isLoggedIn = useSelector(selectorIsLoggedIn)
-  const dispatch = useDispatch<any>()
+  // const dispatch = useDispatch<any>()
+  const { initializeApp, logout } = useActions()
 
   useEffect(() => {
-    dispatch(authThunks.initializeApp())
+    //dispatch(authThunks.initializeApp())
+    initializeApp()
   }, [])
 
   const logoutHandler = useCallback(() => {
-    dispatch(authThunks.logout())
+    // dispatch(authThunks.logout())
+    logout()
   }, [])
 
   if (!isInitialized) {

@@ -2,7 +2,15 @@ import axios from "axios"
 import { AppDispatch } from "app/store"
 import { appActions } from "app/appSlice"
 
-export const handleServerNetworkError = (err: unknown, dispatch: AppDispatch): void => {
+/**
+ * handleServerNetworkError - Обрабатывает ошибку сервера или сети, определяет текст ошибки и обновляет соответствующие
+ * состояния в Redux.
+ * @param err - Объект ошибки, который необходимо обработать.
+ * @param dispatch - Функция диспетча Redux для отправки действий.
+ * @param isGlobalError - Флаг, указывающий, является ли ошибка глобальной. По умолчанию true.
+ */
+
+export const handleServerNetworkError = (err: unknown, dispatch: AppDispatch, isGlobalError: boolean = true): void => {
   let errorMessage = "Some error occurred"
 
   if (axios.isAxiosError(err)) {
