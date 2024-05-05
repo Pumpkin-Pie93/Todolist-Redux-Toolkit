@@ -1,49 +1,46 @@
 import React from "react"
-import { useFormik } from "formik"
-import { useSelector } from "react-redux"
 import { Navigate } from "react-router-dom"
-import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from "@mui/material"
-import { selectorIsLoggedIn } from "app/app-selectors"
-import { authThunks } from "features/Login/authSlice"
-import { BaseResponseType } from "common/types"
+import { useLogin } from "../lib/useLogin"
 
 export const Login = () => {
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
+  //
+  // const isLoggedIn = useSelector(selectorIsLoggedIn)
+  //
+  // const formik = useFormik({
+  //   validate: (values) => {
+  //     if (!values.email) {
+  //       return {
+  //         email: "Email is required",
+  //       }
+  //     }
+  //     if (!values.password) {
+  //       return {
+  //         password: "Password is required",
+  //       }
+  //     }
+  //   },
+  //   initialValues: {
+  //     email: "",
+  //     password: "",
+  //     rememberMe: false,
+  //   },
+  //   onSubmit: (data, formikHelpers) => {
+  //     dispatch(authThunks.login({ data }))
+  //       .unwrap()
+  //       .then((res) => {})
+  //       .catch((e: BaseResponseType) => {
+  //         if (e.fieldsErrors) {
+  //           e.fieldsErrors.forEach((el) => {
+  //             formikHelpers.setFieldError(el.field, el.error)
+  //           })
+  //         }
+  //       })
+  //   },
+  // })
 
-  const isLoggedIn = useSelector(selectorIsLoggedIn)
-
-  const formik = useFormik({
-    validate: (values) => {
-      if (!values.email) {
-        return {
-          email: "Email is required",
-        }
-      }
-      if (!values.password) {
-        return {
-          password: "Password is required",
-        }
-      }
-    },
-    initialValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
-    onSubmit: (data, formikHelpers) => {
-      dispatch(authThunks.login({ data }))
-        .unwrap()
-        .then((res) => {})
-        .catch((e: BaseResponseType) => {
-          if (e.fieldsErrors) {
-            e.fieldsErrors.forEach((el) => {
-              formikHelpers.setFieldError(el.field, el.error)
-            })
-          }
-        })
-    },
-  })
+  const {isLoggedIn, formik} = useLogin()
 
   if (isLoggedIn) {
     return <Navigate to={"/"} />
