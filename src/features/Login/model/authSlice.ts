@@ -1,10 +1,10 @@
-import { LoginParamsType } from "features/TodolistsList/todolists-api"
 import { createSlice } from "@reduxjs/toolkit"
 import { appActions } from "app/appSlice"
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "common/utils"
-import { authAPI } from "features/Login/authApi"
+import { authAPI } from "features/Login/api/authApi"
 import { clearTasksAndTodolists } from "common/actions/common-actions"
 import { ResultCode } from "common/enums"
+import { LoginParamsType } from "../../TodolistsList/api/todolistsApi.types"
 
 export type AppInitialStateType = ReturnType<typeof slice.getInitialState>
 

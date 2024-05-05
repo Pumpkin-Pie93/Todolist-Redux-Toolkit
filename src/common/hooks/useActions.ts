@@ -1,9 +1,9 @@
 import { useMemo } from "react"
 import { ActionCreatorsMapObject, bindActionCreators } from "redux"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
-import { tasksThunks } from "features/TodolistsList/tasksSlice"
-import { authThunks } from "features/Login/authSlice"
-import { todolistActions, todolistThunks } from "features/TodolistsList/todolistsSlice"
+import { tasksThunks } from "features/TodolistsList/model/tasks/tasksSlice"
+import { authThunks } from "features/Login/model/authSlice"
+import { todolistActions, todolistThunks } from "features/TodolistsList/model/todolists/todolistsSlice"
 
 // ❗ упаковываем actions и соответсвенно при вызове хука не нужно
 // будет передавать actions

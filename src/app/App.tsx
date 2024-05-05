@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from "react"
 import "./App.css"
-import { TodolistsList } from "features/TodolistsList/TodolistsList"
+import { TodolistsList } from "features/TodolistsList/ui/TodolistsList"
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar"
 import { useDispatch, useSelector } from "react-redux"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { Login } from "features/Login/Login"
+import { Login } from "features/Login/ui/Login"
 import {
   AppBar,
   Button,
@@ -17,7 +17,7 @@ import {
 } from "@mui/material"
 import { Menu } from "@mui/icons-material"
 import { selectorIsInitialized, selectorIsLoggedIn, selectorStatus } from "app/app-selectors"
-import { authThunks } from "features/Login/authSlice"
+import { authThunks } from "features/Login/model/authSlice"
 import { useActions } from "common/hooks/useActions"
 
 type PropsType = {

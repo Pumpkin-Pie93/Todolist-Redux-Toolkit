@@ -1,8 +1,8 @@
-import { tasksReducer } from "features/TodolistsList/tasksSlice"
-import { todolistsReducer } from "features/TodolistsList/todolistsSlice"
+import { tasksReducer } from "features/TodolistsList/model/tasks/tasksSlice"
+import { todolistsReducer } from "features/TodolistsList/model/todolists/todolistsSlice"
 import { ThunkAction, ThunkDispatch } from "redux-thunk"
 import { appReducer } from "app/appSlice"
-import { authReducer } from "features/Login/authSlice"
+import { authReducer } from "features/Login/model/authSlice"
 import { configureStore, UnknownAction } from "@reduxjs/toolkit"
 
 // ❗старая запись, с новыми версиями не работает

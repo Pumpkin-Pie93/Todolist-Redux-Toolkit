@@ -2,9 +2,9 @@ import { useAppDispatch } from "../../common/hooks/useAppDispatch"
 import { useSelector } from "react-redux"
 import { selectorIsLoggedIn } from "../../app/app-selectors"
 import { useFormik } from "formik"
-import { authThunks } from "../Login/authSlice"
+import { authThunks } from "../Login/model/authSlice"
 import { BaseResponseType } from "../../common/types"
-import { LoginParamsType } from "../TodolistsList/todolists-api"
+import { LoginParamsType } from "../TodolistsList/api/todolistsApi.types"
 
 type FormikErrorsType = Omit<Partial<LoginParamsType>,'captcha'>
 
