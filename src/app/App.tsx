@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect } from "react"
-import "./App.css"
 import { TodolistsList } from "features/TodolistsList/ui/TodolistsList"
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Login } from "features/Login/ui/Login"
 import {
@@ -17,7 +16,6 @@ import {
 } from "@mui/material"
 import { Menu } from "@mui/icons-material"
 import { selectorIsInitialized, selectorIsLoggedIn, selectorStatus } from "app/app-selectors"
-import { authThunks } from "features/Login/model/authSlice"
 import { useActions } from "common/hooks/useActions"
 
 type PropsType = {
@@ -28,16 +26,13 @@ function App({ demo = false }: PropsType) {
   const status = useSelector(selectorStatus)
   const isInitialized = useSelector(selectorIsInitialized)
   const isLoggedIn = useSelector(selectorIsLoggedIn)
-  // const dispatch = useDispatch<any>()
   const { initializeApp, logout } = useActions()
 
   useEffect(() => {
-    //dispatch(authThunks.initializeApp())
     initializeApp()
   }, [])
 
   const logoutHandler = useCallback(() => {
-    // dispatch(authThunks.logout())
     logout()
   }, [])
 
