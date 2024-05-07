@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction, UnknownAction } from "@reduxjs/toolkit"
+import { createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
 
 const slice = createSlice({
   name: "app",
   initialState: {
     status: "idle" as RequestStatusType,
     error: null as string | null,
-    isInitialized: false,
+    isInitialized: false
   },
   reducers: {
     setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
@@ -16,29 +16,21 @@ const slice = createSlice({
     },
     setAppInitialized: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
       state.isInitialized = action.payload.isInitialized
-    },
+    }
   },
-  extraReducers:(builder)=>{
+  extraReducers: (builder) => {
+    builder.addMatcher(isPending, (state, _) => {
+      state.status = "loading"
+    })
     builder.addMatcher(
-      (action:UnknownAction)=> {
-        return action.type.endsWith('/pending')
-      },
-      (state, _)=>{
-        state.status = 'loading'
+     isRejected,
+      (state, _) => {
+        state.status = "failed"
       })
     builder.addMatcher(
-      (action:UnknownAction)=> {
-        return action.type.endsWith('/rejected')
-      },
-      (state, _)=>{
-        state.status = 'failed'
-      })
-    builder.addMatcher(
-      (action:UnknownAction)=> {
-        return action.type.endsWith('/fulfilled')
-      },
-      (state, _)=>{
-        state.status = 'succeeded'
+     isFulfilled,
+      (state, _) => {
+        state.status = "succeeded"
       })
   }
 })

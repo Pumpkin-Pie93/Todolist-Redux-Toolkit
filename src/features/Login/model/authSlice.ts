@@ -1,30 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, isAnyOf, PayloadAction, UnknownAction } from "@reduxjs/toolkit"
 import { appActions } from "app/appSlice"
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "common/utils"
 import { authAPI } from "features/Login/api/authApi"
 import { clearTasksAndTodolists } from "common/actions/common-actions"
 import { ResultCode } from "common/enums"
-import { LoginParamsType } from "../../TodolistsList/api/todolistsApi.types"
+import { LoginParamsType } from "features/TodolistsList/api/todolistsApi.types"
 
-export type AppInitialStateType = ReturnType<typeof slice.getInitialState>
+// export type AppInitialStateType = ReturnType<typeof slice.getInitialState>
 
 const slice = createSlice({
   name: "auth",
   initialState: {
-    isLoggedIn: false,
+    isLoggedIn: false
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(authThunks.login.fulfilled, (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn
-    })
-    builder.addCase(authThunks.logout.fulfilled, (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn
-    })
-    builder.addCase(authThunks.initializeApp.fulfilled, (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn
-    })
-  },
+    builder.addMatcher(
+      isAnyOf(authThunks.login.fulfilled,authThunks.logout.fulfilled,authThunks.initializeApp.fulfilled),
+      (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
+        state.isLoggedIn = action.payload.isLoggedIn
+      }
+    )
+  }
 })
 
 // thunks
@@ -48,7 +45,7 @@ const login = createAppAsyncThunk<{ isLoggedIn: boolean }, { data: LoginParamsTy
       handleServerNetworkError(error, dispatch)
       return rejectWithValue(null)
     }
-  },
+  }
 )
 
 const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, void>(`${slice.name}/logout`, async (_, thunkAPI) => {
@@ -90,7 +87,7 @@ const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
     } finally {
       dispatch(appActions.setAppInitialized({ isInitialized: true }))
     }
-  },
+  }
 )
 
 // exports
