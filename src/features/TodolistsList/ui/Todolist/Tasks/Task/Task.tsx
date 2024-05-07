@@ -5,7 +5,7 @@ import { Delete } from "@mui/icons-material"
 import { TaskStatuses } from "common/enums"
 import { useActions } from "common/hooks/useActions"
 import { TaskType } from "features/TodolistsList/api/tasksApi.types"
-import s from './Task.module.css'
+import s from 'features/TodolistsList/ui/Todolist/Tasks/Task/Task.module.css'
 
 type Props = {
   task: TaskType
