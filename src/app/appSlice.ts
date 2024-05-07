@@ -1,4 +1,5 @@
 import { createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
+import { todolistThunks } from "features/TodolistsList/model/todolists/todolistsSlice"
 
 const slice = createSlice({
   name: "app",
@@ -19,18 +20,28 @@ const slice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addMatcher(isPending, (state, _) => {
-      state.status = "loading"
-    })
-    builder.addMatcher(
-     isRejected,
-      (state, _) => {
-        state.status = "failed"
+    builder
+      .addMatcher(isPending, (state, action: any) => {
+        console.log(action.type)
+        console.log(todolistThunks.addTodolist)
+        state.status = "loading"
       })
-    builder.addMatcher(
-     isFulfilled,
-      (state, _) => {
+      .addMatcher(isFulfilled, (state, action: any) => {
         state.status = "succeeded"
+      })
+      .addMatcher(isRejected, (state, action: any) => {
+        state.status = "failed"
+        if (action.payload) {
+          // console.log(action.type)
+          if (action.type === todolistThunks.addTodolist.rejected.type) return;
+          // ❓❓❓???Cannot read properties of undefined (reading 'createAppAsyncThunk')
+          state.error = action.payload.messages[0]
+        } else {
+          state.error = action.error.message ? action.error.message : "Some error occurred"
+        }
+      })
+      .addDefaultCase((state, action)=>{
+        console.log(action.type)
       })
   }
 })
