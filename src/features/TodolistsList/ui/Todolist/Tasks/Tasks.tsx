@@ -21,15 +21,11 @@ export const Tasks = ({tasks,todolist}: Props) => {
   }
 
   return (
-    <div>
+    <>
       {tasksForTodolist.map((t) => (
-        <Task
-          key={t.id}
-          task={t}
-          todolistId={todolist.id}
-        />
+        <Task key={t.id} task={t} todolistId={todolist.id} />
       ))}
-    </div>
+    </>
   )
 }
 
