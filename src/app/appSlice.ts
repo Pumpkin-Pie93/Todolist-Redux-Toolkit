@@ -6,7 +6,7 @@ const slice = createSlice({
   initialState: {
     status: "idle" as RequestStatusType,
     error: null as string | null,
-    isInitialized: false
+    isInitialized: false,
   },
   reducers: {
     setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
@@ -17,7 +17,7 @@ const slice = createSlice({
     },
     setAppInitialized: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
       state.isInitialized = action.payload.isInitialized
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -29,21 +29,21 @@ const slice = createSlice({
       .addMatcher(isFulfilled, (state, action: any) => {
         state.status = "succeeded"
       })
-      .addMatcher(isRejected, (state, action: any) => {
-        state.status = "failed"
-        if (action.payload) {
-          // console.log(action.type)
-          if (action.type === todolistThunks.addTodolist.rejected.type) return;
-          // ❓❓❓???Cannot read properties of undefined (reading 'createAppAsyncThunk')
-          state.error = action.payload.messages[0]
-        } else {
-          state.error = action.error.message ? action.error.message : "Some error occurred"
-        }
-      })
-      .addDefaultCase((state, action)=>{
-        console.log(action.type)
-      })
-  }
+    // .addMatcher(isRejected, (state, action: any) => {
+    //   state.status = "failed"
+    //   if (action.payload) {
+    //     // console.log(action.type)
+    //     //if (action.type === todolistThunks.addTodolist.rejected.type) return;
+    //     // ❓❓❓???Cannot read properties of undefined (reading 'createAppAsyncThunk')
+    //     state.error = action.payload.messages[0]
+    //   } else {
+    //     state.error = action.error.message ? action.error.message : "Some error occurred"
+    //   }
+    // })
+    // .addDefaultCase((state, action) => {
+    //   console.log(action.type)
+    // })
+  },
 })
 
 //exports
