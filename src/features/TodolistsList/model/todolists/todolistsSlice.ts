@@ -1,6 +1,6 @@
 import { todolistsApi } from "features/TodolistsList/api/todolistsApi"
-import { appActions, RequestStatusType } from "app/appSlice"
-import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError, thunkTryCatch } from "common/utils"
+import { RequestStatusType } from "app/appSlice"
+import { createAppAsyncThunk } from "common/utils"
 import { createSlice, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { ResultCode } from "common/enums"
 import { clearTasksAndTodolists } from "common/actions/common-actions"
@@ -70,7 +70,7 @@ const slice = createSlice({
         }
       })
       // прииспользовании clearTasksAndTodolists из common actions:
-      .addCase(clearTasksAndTodolists, (state, action) => {
+      .addCase(clearTasksAndTodolists, () => {
         return []
       })
       .addMatcher(isRejected(todolistThunks.removeTodolist),(state,action)=>{
@@ -87,6 +87,7 @@ const slice = createSlice({
 export const fetchTodolists = createAppAsyncThunk<{ todolists: TodolistType[] }, void>(
   `${slice.name}/fetchTodolists`,
   async () => {
+    debugger
     const res = await todolistsApi.getTodolists()
     return { todolists: res.data }
   }
@@ -98,8 +99,10 @@ export const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, { tit
     const res = await todolistsApi.createTodolist(arg.title)
     if (res.data.resultCode === ResultCode.success) {
       return { todolist: res.data.data.item }
-    } else {
+    }
+    else {
       // handleServerAppError(res.data, dispatch,false)
+
       return rejectWithValue(res.data)
     }
   }
@@ -122,7 +125,7 @@ const removeTodolist = createAppAsyncThunk<{ id: string }, {
 export const changeTodolistTitle = createAppAsyncThunk<{ id: string; title: string }, { id: string; title: string }>(
   `${slice.name}/changeTodolistTitle`,
   async ({ id, title }, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI
+    const {  rejectWithValue } = thunkAPI
     const res = await todolistsApi.updateTodolist(id, title)
     if (res.data.resultCode === ResultCode.success) {
       return { id, title }
