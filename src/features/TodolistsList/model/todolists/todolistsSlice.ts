@@ -1,6 +1,6 @@
 import { todolistsApi } from "features/TodolistsList/api/todolistsApi"
-import { appActions, RequestStatusType } from "app/appSlice"
-import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError, thunkTryCatch } from "common/utils"
+import { RequestStatusType } from "app/appSlice"
+import { createAppAsyncThunk } from "common/utils"
 import { createSlice, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { ResultCode } from "common/enums"
 import { clearTasksAndTodolists } from "common/actions/common-actions"
@@ -22,7 +22,7 @@ const slice = createSlice({
       action: PayloadAction<{
         id: string
         filter: FilterValuesType
-      }>
+      }>,
     ) => {
       const index = state.findIndex((el) => el.id === action.payload.id)
       if (index !== -1) {
@@ -34,13 +34,13 @@ const slice = createSlice({
       action: PayloadAction<{
         id: string
         entityStatus: RequestStatusType
-      }>
+      }>,
     ) => {
       const index = state.findIndex((el) => el.id === action.payload.id)
       if (index !== -1) {
         state[index].entityStatus = action.payload.entityStatus
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -59,7 +59,7 @@ const slice = createSlice({
         const newTodolist: TodolistDomainType = {
           ...action.payload.todolist,
           filter: "all",
-          entityStatus: "idle"
+          entityStatus: "idle",
         } // можно аншифтнуть сразу объект нового тодуса и тогда не нужна типизация
         state.unshift(newTodolist)
       })
@@ -70,16 +70,16 @@ const slice = createSlice({
         }
       })
       // прииспользовании clearTasksAndTodolists из common actions:
-      .addCase(clearTasksAndTodolists, (state, action) => {
+      .addCase(clearTasksAndTodolists, () => {
         return []
       })
-      .addMatcher(isRejected(todolistThunks.removeTodolist),(state,action)=>{
-        const todo = state.find((todo)=> todo.id === action.meta.arg.id)
-        if(todo){
-          todo.entityStatus = 'idle'
+      .addMatcher(isRejected(todolistThunks.removeTodolist), (state, action) => {
+        const todo = state.find((todo) => todo.id === action.meta.arg.id)
+        if (todo) {
+          todo.entityStatus = "idle"
         }
       })
-  }
+  },
 })
 
 // thunks
@@ -89,7 +89,7 @@ export const fetchTodolists = createAppAsyncThunk<{ todolists: TodolistType[] },
   async () => {
     const res = await todolistsApi.getTodolists()
     return { todolists: res.data }
-  }
+  },
 )
 
 export const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, { title: string }>(
@@ -102,12 +102,12 @@ export const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, { tit
       // handleServerAppError(res.data, dispatch,false)
       return rejectWithValue(res.data)
     }
-  }
+  },
 )
 
-const removeTodolist = createAppAsyncThunk<{ id: string }, {
-  id: string
-}>(`${slice.name}/removeTodolist`, async ({ id }, thunkAPI) => {
+const removeTodolist = createAppAsyncThunk<{ id: string }, { id: string }>(
+  `${slice.name}/removeTodolist`,
+  async ({ id }, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
     dispatch(todolistActions.changeTodolistEntityStatus({ id, entityStatus: "loading" }))
     const res = await todolistsApi.deleteTodolist(id)
@@ -116,20 +116,20 @@ const removeTodolist = createAppAsyncThunk<{ id: string }, {
     } else {
       return rejectWithValue(res.data)
     }
-  }
+  },
 )
 
 export const changeTodolistTitle = createAppAsyncThunk<{ id: string; title: string }, { id: string; title: string }>(
   `${slice.name}/changeTodolistTitle`,
   async ({ id, title }, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI
+    const { rejectWithValue } = thunkAPI
     const res = await todolistsApi.updateTodolist(id, title)
     if (res.data.resultCode === ResultCode.success) {
       return { id, title }
     } else {
       return rejectWithValue(res.data)
     }
-  }
+  },
 )
 
 export const todolistsReducer = slice.reducer

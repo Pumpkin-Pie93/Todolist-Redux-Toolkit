@@ -18,7 +18,7 @@ export const handleServerAppError = <D>(
   showGlobalError: boolean = true,
 ) => {
   if (showGlobalError) {
-    debugger
+    ;("")
     dispatch(
       appActions.setAppError({
         error: data.messages.length ? data.messages[0] : "Some error occurred",

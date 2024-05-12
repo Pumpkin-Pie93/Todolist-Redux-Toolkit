@@ -12,7 +12,7 @@ import { appActions } from "app/appSlice"
 
 export const handleServerNetworkError = (err: unknown, dispatch: AppDispatch, isGlobalError: boolean = true): void => {
   let errorMessage = "Some error occurred"
-
+  ;("")
   if (axios.isAxiosError(err)) {
     errorMessage = err.response?.data?.message || err?.message || errorMessage
   } else if (err instanceof Error) {
