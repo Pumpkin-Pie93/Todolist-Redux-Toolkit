@@ -5,7 +5,6 @@ export enum TaskStatuses {
   InProgress = 1,
   Completed = 2,
   Draft = 3,
-  Go,
 }
 export enum TaskPriorities {
   Low = 0,
